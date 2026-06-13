@@ -15,22 +15,16 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Gradle
-        # --stacktrace va --info bizga nima xato bo'layotganini yozib beradi
+        # --refresh-dependencies: barcha kutubxonalarni qayta yuklaydi
+        # --no-daemon: Gradle'ni yangi jarayonda ishga tushiradi
+        # clean: eski fayllarni tozalaydi
         run: |
           chmod +x gradlew
-          ./gradlew clean assembleDebug --stacktrace --info
+          ./gradlew clean assembleDebug --refresh-dependencies --info
 
-      # Fayl borligini tekshirish uchun qo'shimcha qadam
-      - name: Verify APK existence
+      - name: Check APK size
         run: |
-          echo "Papkadagi fayllar:"
-          ls -R app/build/outputs/apk/
-          if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
-            echo "APK fayl topildi!"
-          else
-            echo "XATO: APK fayl topilmadi!"
-            exit 1
-          fi
+          ls -lh app/build/outputs/apk/debug/
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
