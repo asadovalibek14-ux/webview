@@ -8,22 +8,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Diagnostika uchun: Papkada nima borligini tekshiramiz
-      - name: List files
-        run: ls -R
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Agar gradlew bo'lmasa, bu qadam xato beradi
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew || echo "gradlew topilmadi!"
-
       - name: Build with Gradle
-        run: ./gradlew assembleDebug || echo "Build xatolik bilan tugadi!"
+        run: |
+          chmod +x gradlew
+          ./gradlew clean assembleDebug
+        # 'clean' buyrug'i eski fayllarni o'chiradi, 'assembleDebug' yangisini yaratadi.
+
+      - name: Check generated APK
+        run: |
+          echo "Build tugadi. APK fayllarni tekshiramiz:"
+          ls -lh app/build/outputs/apk/debug/
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
