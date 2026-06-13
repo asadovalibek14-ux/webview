@@ -14,16 +14,23 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # 1. Build qilish
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew clean assembleDebug
-        # 'clean' buyrug'i eski fayllarni o'chiradi, 'assembleDebug' yangisini yaratadi.
+          ./gradlew assembleDebug
 
-      - name: Check generated APK
+      # 2. FAYL BORLIGINI TEKSHIRISH (Buni qo'shdik)
+      - name: Verify APK existence
         run: |
-          echo "Build tugadi. APK fayllarni tekshiramiz:"
-          ls -lh app/build/outputs/apk/debug/
+          echo "Papkadagi fayllar:"
+          ls -R app/build/outputs/apk/
+          if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+            echo "APK fayl topildi!"
+          else
+            echo "XATO: APK fayl topilmadi!"
+            exit 1
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
