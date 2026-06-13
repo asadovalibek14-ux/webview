@@ -14,13 +14,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 1. Build qilish
       - name: Build with Gradle
+        # --stacktrace va --info bizga nima xato bo'layotganini yozib beradi
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew clean assembleDebug --stacktrace --info
 
-      # 2. FAYL BORLIGINI TEKSHIRISH (Buni qo'shdik)
+      # Fayl borligini tekshirish uchun qo'shimcha qadam
       - name: Verify APK existence
         run: |
           echo "Papkadagi fayllar:"
